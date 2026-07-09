@@ -36,7 +36,7 @@
   cors({
     origin: [
       "http://localhost:5173",
-      "storyn-kappa.vercel.app",
+      "https://storyn-kappa.vercel.app",
     ],
     credentials: true,
   })
