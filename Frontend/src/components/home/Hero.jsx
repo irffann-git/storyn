@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-/* ─────────────────────────────────────────
-   HERO SLIDES
-───────────────────────────────────────── */
 const heroSlides = [
   {
     id: 1,
@@ -40,7 +37,6 @@ function Hero() {
 
   const resetTimer = () => {
     clearInterval(timerRef.current);
-
     timerRef.current = setInterval(() => {
       setSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5500);
@@ -59,10 +55,8 @@ function Hero() {
   return (
     <section
       className="relative w-full bg-[#2A3308]"
-      // More sensible height: smaller on mobile, taller on desktop
-      style={{
-        height: "clamp(400px, 60vh, 1000px)",
-      }}
+      // Fluid height: tight on mobile, comfortable on desktop
+      style={{ height: "clamp(420px, 70vh, 850px)" }}
     >
       {/* Background Images */}
       {heroSlides.map((item, index) => (
@@ -84,34 +78,50 @@ function Hero() {
       ))}
 
       {/* Overlay Content */}
-      <div className="absolute inset-0 z-10 flex items-center px-4 sm:px-6 lg:px-10">
+      <div className="absolute inset-0 z-10 flex items-center px-4 sm:px-6 lg:px-12">
         <div className="max-w-7xl mx-auto w-full">
           <div className="max-w-xl">
-            {/* Eyebrow badge */}
-            <span className="inline-flex items-center gap-2 bg-[#37400B] text-white text-xs sm:text-sm font-bold uppercase tracking-widest px-3 py-1.5 sm:px-4 sm:py-2 rounded-full mb-4 sm:mb-5">
+            {/* Eyebrow – fully fluid font size */}
+            <span
+              className="inline-flex items-center gap-2 bg-[#37400B] text-white font-bold uppercase tracking-widest rounded-full mb-4 sm:mb-5"
+              style={{
+                fontSize: "clamp(0.6875rem, 1.8vw, 0.875rem)", // 11px -> 14px
+                padding: "clamp(0.25rem, 0.8vw, 0.5rem) clamp(0.5rem, 2vw, 1rem)",
+              }}
+            >
               <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
               {heroSlides[slide].eyebrow}
             </span>
 
-            {/* Title with responsive sizing */}
+            {/* Title – fluid scaling */}
             <h1
               key={slide}
-              className="text-[clamp(1.75rem,5vw,3.75rem)] font-black text-white leading-tight mb-4 sm:mb-5"
-              style={{ fontFamily: "Georgia, serif" }}
+              className="font-black text-white leading-tight mb-4 sm:mb-5"
+              style={{
+                fontFamily: "Georgia, serif",
+                fontSize: "clamp(1.6rem, 5vw, 3.75rem)",
+              }}
             >
               {heroSlides[slide].title}
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-white/80 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-md">
+            {/* Subtitle – fluid scaling */}
+            <p
+              className="text-white/80 leading-relaxed mb-6 sm:mb-8 max-w-md"
+              style={{ fontSize: "clamp(0.875rem, 2vw, 1.125rem)" }}
+            >
               {heroSlides[slide].subtitle}
             </p>
 
-            {/* CTA Buttons – stack on mobile */}
+            {/* CTA Buttons – fluid font & padding, stack on mobile */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link
                 to={heroSlides[slide].ctaLink}
-                className="inline-flex items-center justify-center gap-2 bg-[#37400B] hover:bg-[#2A3308] text-white font-semibold px-6 py-3 rounded-full transition text-center"
+                className="inline-flex items-center justify-center gap-2 bg-[#37400B] hover:bg-[#2A3308] text-white font-semibold rounded-full transition text-center"
+                style={{
+                  fontSize: "clamp(0.8125rem, 2vw, 1rem)",
+                  padding: "clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.75rem)",
+                }}
               >
                 {heroSlides[slide].cta}
                 <i className="fas fa-arrow-right text-xs"></i>
@@ -119,7 +129,11 @@ function Hero() {
 
               <Link
                 to="/books"
-                className="inline-flex items-center justify-center gap-2 text-white hover:text-[#BDB47B] transition py-3 px-4 rounded-full"
+                className="inline-flex items-center justify-center gap-2 text-white hover:text-[#BDB47B] transition rounded-full"
+                style={{
+                  fontSize: "clamp(0.8125rem, 2vw, 1rem)",
+                  padding: "clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.75rem)",
+                }}
               >
                 <i className="fas fa-th-large"></i>
                 Browse All
@@ -129,20 +143,23 @@ function Hero() {
         </div>
       </div>
 
-      {/* Slide Counter – hidden on small screens, absolute on medium+ */}
+      {/* Slide Counter – fluid size, hidden on small screens */}
       <div className="absolute bottom-6 right-6 z-20 hidden md:flex items-end gap-1">
         <span
-          className="text-white text-2xl font-bold"
-          style={{ fontFamily: "Georgia, serif" }}
+          className="text-white font-bold"
+          style={{
+            fontFamily: "Georgia, serif",
+            fontSize: "clamp(1.125rem, 3vw, 1.5rem)",
+          }}
         >
           {String(slide + 1).padStart(2, "0")}
         </span>
-        <span className="text-white/40">
+        <span className="text-white/40 text-sm md:text-base">
           / {String(heroSlides.length).padStart(2, "0")}
         </span>
       </div>
 
-      {/* Dots – larger touch area on mobile */}
+      {/* Dots – touch‑friendly on mobile */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2.5">
         {heroSlides.map((_, index) => (
           <button
