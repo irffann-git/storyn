@@ -51,6 +51,7 @@ function Books() {
   const [modal, setModal] = useState(null);
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     dispatch(getBooks());
@@ -127,7 +128,6 @@ function Books() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Preview
     const reader = new FileReader();
     reader.onloadend = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);
@@ -147,6 +147,7 @@ function Books() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     if (editingBook) {
       await dispatch(updateBook({ id: editingBook._id, bookData: formData }));
     } else {
@@ -155,6 +156,7 @@ function Books() {
     dispatch(getBooks());
     resetForm();
     setShowForm(false);
+    setIsSubmitting(false);
   };
 
   const filteredBooks = books?.filter((book) =>
@@ -171,7 +173,7 @@ function Books() {
         {/* ─── Header ─── */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#37400B] tracking-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#37400B] tracking-tight">
               Books Management
             </h1>
             <p className="text-[#BDB47B] text-sm mt-1">Manage your store's inventory</p>
@@ -181,7 +183,7 @@ function Books() {
               if (showForm) resetForm();
               setShowForm(!showForm);
             }}
-            className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg ${
+            className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 md:px-6 md:py-3 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg ${
               showForm
                 ? "bg-red-100 text-red-600 hover:bg-red-200"
                 : "bg-[#37400B] text-white hover:bg-[#2A3308] hover:-translate-y-0.5"
@@ -194,22 +196,22 @@ function Books() {
 
         {/* ─── Stats ─── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <div className="bg-white rounded-2xl shadow-sm p-5 border border-[#EDE4CB] hover:border-[#BDB47B]/30 transition flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#EDE4CB] rounded-full flex items-center justify-center text-[#37400B]">
+          <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5 border border-[#EDE4CB] hover:border-[#BDB47B]/30 transition flex items-center gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#EDE4CB] rounded-full flex items-center justify-center text-[#37400B] shrink-0">
               <FaShoppingBag className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-sm text-[#6B5D4F] font-medium">Total Books</p>
-              <p className="text-2xl font-bold text-[#37400B]">{books?.length || 0}</p>
+              <p className="text-xs sm:text-sm text-[#6B5D4F] font-medium">Total Books</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#37400B]">{books?.length || 0}</p>
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm p-5 border border-[#EDE4CB] hover:border-[#BDB47B]/30 transition flex items-center gap-4">
-            <div className="w-12 h-12 bg-[#EDE4CB] rounded-full flex items-center justify-center text-[#37400B]">
+          <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-5 border border-[#EDE4CB] hover:border-[#BDB47B]/30 transition flex items-center gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#EDE4CB] rounded-full flex items-center justify-center text-[#37400B] shrink-0">
               <FaExclamationTriangle className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-sm text-[#6B5D4F] font-medium">Low Stock (&lt;5)</p>
-              <p className="text-2xl font-bold text-red-600">{lowStockBooks}</p>
+              <p className="text-xs sm:text-sm text-[#6B5D4F] font-medium">Low Stock (&lt;5)</p>
+              <p className="text-xl sm:text-2xl font-bold text-red-600">{lowStockBooks}</p>
             </div>
           </div>
         </div>
@@ -221,7 +223,7 @@ function Books() {
             placeholder="Search by title…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white border border-[#EDE4CB] rounded-xl px-4 py-3 text-sm text-[#2B2118] focus:outline-none focus:ring-2 focus:ring-[#37400B] placeholder:text-[#BDB47B]"
+            className="w-full bg-white border border-[#EDE4CB] rounded-xl px-4 py-3 text-sm text-[#2B2118] focus:outline-none focus:ring-2 focus:ring-[#37400B] placeholder:text-[#BDB47B] transition"
           />
         </div>
 
@@ -229,21 +231,21 @@ function Books() {
         {showForm && (
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl shadow-md p-6 md:p-8 mb-6 border border-[#EDE4CB]"
+            className="bg-white rounded-2xl shadow-md p-5 sm:p-6 md:p-8 mb-6 border border-[#EDE4CB]"
           >
-            <h2 className="text-2xl font-bold text-[#37400B] mb-6 flex items-center gap-2">
-              <span className="w-1 h-8 bg-[#37400B] rounded-full" />
+            <h2 className="text-xl sm:text-2xl font-bold text-[#37400B] mb-6 flex items-center gap-2">
+              <span className="w-1 h-6 sm:h-8 bg-[#37400B] rounded-full" />
               {editingBook ? "Edit Book" : "Add New Book"}
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 type="text"
                 name="title"
                 placeholder="Title *"
                 value={formData.title}
                 onChange={handleChange}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B]"
+                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition"
                 required
               />
               <input
@@ -252,7 +254,7 @@ function Books() {
                 placeholder="Author / Artist *"
                 value={formData.author}
                 onChange={handleChange}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B]"
+                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition"
                 required
               />
 
@@ -260,7 +262,7 @@ function Books() {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B]"
+                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition"
                 required
               >
                 {CATEGORY_OPTIONS.map((cat) => (
@@ -272,7 +274,7 @@ function Books() {
                 name="subcategory"
                 value={formData.subcategory}
                 onChange={handleChange}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B]"
+                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition"
                 required
               >
                 {(CATEGORY_STRUCTURE[formData.category] || []).map((sub) => (
@@ -286,7 +288,7 @@ function Books() {
                 placeholder="Price *"
                 value={formData.price}
                 onChange={handleChange}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B]"
+                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition"
                 required
               />
               <input
@@ -295,7 +297,7 @@ function Books() {
                 placeholder="Stock *"
                 value={formData.stock}
                 onChange={handleChange}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B]"
+                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition"
                 required
               />
 
@@ -305,14 +307,14 @@ function Books() {
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#EDE4CB] file:text-[#37400B] hover:file:bg-[#BDB47B]/30"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#EDE4CB] file:text-[#37400B] hover:file:bg-[#BDB47B]/30 transition"
                 />
                 {imagePreview && (
                   <div className="mt-3">
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="w-28 h-36 object-cover rounded-xl border border-[#EDE4CB]"
+                      className="w-24 h-32 sm:w-28 sm:h-36 object-cover rounded-xl border border-[#EDE4CB]"
                     />
                   </div>
                 )}
@@ -322,7 +324,7 @@ function Books() {
                 name="discount"
                 value={formData.discount}
                 onChange={handleChange}
-                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B]"
+                className="border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition"
               >
                 {DISCOUNT_OPTIONS.map((d) => (
                   <option key={d} value={d}>
@@ -347,7 +349,7 @@ function Books() {
               rows="4"
               value={formData.description}
               onChange={handleChange}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] mt-4"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#37400B] transition mt-4"
               required
             />
 
@@ -364,7 +366,6 @@ function Books() {
               </label>
             </div>
 
-            {/* Tags */}
             <div className="mt-6">
               <h3 className="font-semibold text-sm text-[#6B5D4F] mb-3 flex items-center gap-2">
                 <FaTag className="text-[#BDB47B]" />
@@ -394,9 +395,17 @@ function Books() {
 
             <button
               type="submit"
-              className="mt-6 w-full md:w-auto bg-[#37400B] hover:bg-[#2A3308] text-white px-8 py-3 rounded-xl font-semibold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+              disabled={isSubmitting}
+              className="mt-6 w-full md:w-auto bg-[#37400B] hover:bg-[#2A3308] disabled:opacity-60 disabled:cursor-not-allowed text-white px-8 py-3 rounded-xl font-semibold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
             >
-              {editingBook ? "Update Book" : "Save Book"}
+              {isSubmitting ? (
+                <>
+                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  Saving...
+                </>
+              ) : (
+                editingBook ? "Update Book" : "Save Book"
+              )}
             </button>
           </form>
         )}
@@ -407,41 +416,43 @@ function Books() {
             <table className="w-full text-sm">
               <thead className="bg-[#EDE4CB] text-[#37400B]">
                 <tr>
-                  <th className="px-4 py-3 text-left font-semibold">Image</th>
-                  <th className="px-4 py-3 text-left font-semibold">Title</th>
-                  <th className="px-4 py-3 text-left font-semibold hidden md:table-cell">Author</th>
-                  <th className="px-4 py-3 text-left font-semibold hidden lg:table-cell">Category</th>
-                  <th className="px-4 py-3 text-left font-semibold hidden xl:table-cell">Subcategory</th>
-                  <th className="px-4 py-3 text-left font-semibold">Price</th>
-                  <th className="px-4 py-3 text-left font-semibold hidden sm:table-cell">Discount</th>
-                  <th className="px-4 py-3 text-left font-semibold">Stock</th>
-                  <th className="px-4 py-3 text-left font-semibold hidden lg:table-cell">Featured</th>
-                  <th className="px-4 py-3 text-left font-semibold hidden xl:table-cell">Tags</th>
-                  <th className="px-4 py-3 text-left font-semibold">Actions</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold">Image</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold">Title</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold hidden md:table-cell">Author</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold hidden lg:table-cell">Category</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold hidden xl:table-cell">Subcategory</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold">Price</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold hidden sm:table-cell">Discount</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold">Stock</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold hidden lg:table-cell">Featured</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold hidden xl:table-cell">Tags</th>
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredBooks?.length > 0 ? (
                   filteredBooks.map((book) => (
                     <tr key={book._id} className="border-b border-[#EDE4CB] hover:bg-[#EDE4CB]/20 transition">
-                      <td className="px-4 py-3">
+                      <td className="px-3 sm:px-4 py-3">
                         {book.image ? (
                           <img
                             src={book.image}
                             alt={book.title}
-                            className="w-12 h-16 object-cover rounded-lg"
+                            className="w-10 h-14 sm:w-12 sm:h-16 object-cover rounded-lg"
                           />
                         ) : (
-                          <div className="w-12 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-[#BDB47B]">
-                            <FaImage className="w-5 h-5" />
+                          <div className="w-10 h-14 sm:w-12 sm:h-16 bg-gray-100 rounded-lg flex items-center justify-center text-[#BDB47B]">
+                            <FaImage className="w-4 h-4 sm:w-5 sm:h-5" />
                           </div>
                         )}
                       </td>
-                      <td className="px-4 py-3 font-medium text-[#37400B]">{book.title}</td>
-                      <td className="px-4 py-3 text-[#6B5D4F] hidden md:table-cell">{book.author}</td>
-                      <td className="px-4 py-3 text-[#6B5D4F] hidden lg:table-cell">{book.category}</td>
-                      <td className="px-4 py-3 text-[#6B5D4F] hidden xl:table-cell">{book.subcategory || "—"}</td>
-                      <td className="px-4 py-3">
+                      <td className="px-3 sm:px-4 py-3 font-medium text-[#37400B] truncate max-w-[120px] sm:max-w-none">
+                        {book.title}
+                      </td>
+                      <td className="px-3 sm:px-4 py-3 text-[#6B5D4F] hidden md:table-cell">{book.author}</td>
+                      <td className="px-3 sm:px-4 py-3 text-[#6B5D4F] hidden lg:table-cell">{book.category}</td>
+                      <td className="px-3 sm:px-4 py-3 text-[#6B5D4F] hidden xl:table-cell">{book.subcategory || "—"}</td>
+                      <td className="px-3 sm:px-4 py-3">
                         <div>
                           <p className="font-semibold text-[#37400B]">₹{book.price}</p>
                           {book.discount > 0 && (
@@ -449,7 +460,7 @@ function Books() {
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3 hidden sm:table-cell">
+                      <td className="px-3 sm:px-4 py-3 hidden sm:table-cell">
                         {book.discount > 0 ? (
                           <span className="bg-[#37400B]/10 text-[#37400B] text-xs font-bold px-2 py-1 rounded-full">
                             {book.discount}% OFF
@@ -458,10 +469,10 @@ function Books() {
                           <span className="text-gray-300">—</span>
                         )}
                       </td>
-                      <td className={`px-4 py-3 font-semibold ${book.stock < 5 ? "text-red-600" : "text-green-600"}`}>
+                      <td className={`px-3 sm:px-4 py-3 font-semibold ${book.stock < 5 ? "text-red-600" : "text-green-600"}`}>
                         {book.stock}
                       </td>
-                      <td className="px-4 py-3 hidden lg:table-cell">
+                      <td className="px-3 sm:px-4 py-3 hidden lg:table-cell">
                         {book.featured ? (
                           <span className="inline-flex items-center gap-1 bg-[#37400B] text-white text-xs px-2 py-1 rounded-full">
                             <FaStar className="w-3 h-3" />
@@ -471,7 +482,7 @@ function Books() {
                           <span className="text-gray-300">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 hidden xl:table-cell">
+                      <td className="px-3 sm:px-4 py-3 hidden xl:table-cell">
                         <div className="flex flex-wrap gap-1">
                           {book.tags?.length > 0 ? (
                             book.tags.map((tag) => (
@@ -487,7 +498,7 @@ function Books() {
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-3 sm:px-4 py-3">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleEdit(book)}
