@@ -115,7 +115,7 @@ function Checkout() {
                     <div className="text-center py-8">
                       <p className="text-gray-500 mb-4 text-sm">No saved addresses yet.</p>
                       <Link
-                        to="/addresses/new"
+                        to="/addresses"
                         className="inline-flex items-center gap-2 bg-[#37400B] hover:bg-[#2A3308] text-white px-6 py-2.5 rounded-lg text-sm font-medium transition"
                       >
                         <FaPlus className="text-xs" />
@@ -170,7 +170,7 @@ function Checkout() {
                         );
                       })}
                       <Link
-                        to="/addresses/new"
+                        to="/addresses"
                         className="inline-flex items-center gap-1.5 text-sm text-[#37400B] hover:text-[#2A3308] font-medium transition pt-1"
                       >
                         <FaPlus className="text-xs" />
