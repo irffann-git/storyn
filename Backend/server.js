@@ -6,6 +6,7 @@
     const helmet = require("helmet");
     const morgan = require("morgan");
     const path = require("path");
+    const rateLimit = require("express-rate-limit");
 
 
     const connectDB = require("./config/db");
@@ -57,6 +58,12 @@
     app.use("/api/admin/dashboard", dashboardRoutes);
     app.use("/api/contact", contactRoutes);
     app.use(errorHandler);
+    const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use(limiter);
 
     app.get("/", (req, res) => {
     res.send("Storyn API Running");
