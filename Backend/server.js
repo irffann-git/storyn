@@ -32,7 +32,15 @@
     const app = express();
     app.use(morgan("dev"));
 
-    app.use(cors());
+    app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "storyn-kappa.vercel.app",
+    ],
+    credentials: true,
+  })
+);
     app.use(express.json());
     app.use(helmet());
     app.use(limiter);
