@@ -9,17 +9,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const SWIPER_STYLES = `
-  .featured-swiper {
-    overflow: visible !important;
-    clip-path: inset(0 -10px);
-  }
-  .featured-swiper .swiper-wrapper {
-    padding: 8px 0;
-  }
-  .featured-swiper .swiper-button-next::after,
-  .featured-swiper .swiper-button-prev::after {
-    display: none;
-  }
+.featured-swiper {
+  overflow: hidden !important;
+}
+
+.featured-swiper .swiper-wrapper {
+  padding: 8px 0;
+}
+
+.featured-swiper .swiper-button-next::after,
+.featured-swiper .swiper-button-prev::after {
+  display: none;
+}
 `;
 
 const BREAKPOINTS = {
@@ -124,21 +125,23 @@ function FeaturedBooks() {
           </svg>
         </button>
 
-        <Swiper
-          className="featured-swiper"
-          modules={[Navigation, Autoplay]}
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
-          loop={featuredBooks.length > 7}
-          slidesPerGroup={1}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
-          breakpoints={BREAKPOINTS}
-        >
-          {featuredBooks.map((book) => (
-            <SwiperSlide key={book._id}>
-              <BookSlide book={book} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="overflow-hidden w-full">
+  <Swiper
+    className="featured-swiper"
+    modules={[Navigation, Autoplay]}
+    onSwiper={(swiper) => (swiperRef.current = swiper)}
+    loop={featuredBooks.length > 7}
+    slidesPerGroup={1}
+    autoplay={{ delay: 3000, disableOnInteraction: false }}
+    breakpoints={BREAKPOINTS}
+  >
+    {featuredBooks.map((book) => (
+      <SwiperSlide key={book._id}>
+        <BookSlide book={book} />
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
 
       </div>
     </section>

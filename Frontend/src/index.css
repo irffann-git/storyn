@@ -4,6 +4,12 @@
 /* ─── 2. Tailwind ──────────────────────────────────────── */
 @import "tailwindcss";
 
+html, body {
+  touch-action: manipulation;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 /* ─── 3. Your design system classes ───────────────────── */
 .heading-h1 { font-family: 'Sora', sans-serif; font-size: 56px; line-height: 66px; font-weight: 700; }
 .heading-h2 { font-family: 'Sora', sans-serif; font-size: 42px; line-height: 52px; font-weight: 700; }
